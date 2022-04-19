@@ -10,4 +10,4 @@
     if (isset($_SESSION['idUser'])) {
         
     }
-    require 'Vue/vue_Navbar.php';
+    require 'Vue/vue_navbar.html';

@@ -5,4 +5,4 @@ define('DB_DATABASE', 'drive');		// nom de la base de données
 define('DB_USER', 'postgres');			// nom d'utilisateur
 define('DB_PWD', 'root');              	// mot de passe
 define('DB_PORT', 5432);
-define('DSN','pgsql:dbname='.DB_DATABASE.';host='.DB_SERVER.';port='.DB_PORT.';charset=utf8');
+define('DSN','pgsql:dbname='.DB_DATABASE.';host='.DB_SERVER.';port='.DB_PORT);
