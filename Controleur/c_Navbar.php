@@ -7,7 +7,4 @@
                 break;
         }
     }
-    if (isset($_SESSION['idUser'])) {
-        
-    }
-    require 'Vue/vue_navbar.html';
+    require 'Vue/vue_navbar.php';

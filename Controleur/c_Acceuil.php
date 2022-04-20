@@ -7,5 +7,7 @@
                 break;
         } 
     }
+    $tbProduits = $db->getProduits();
+    require 'Controleur/c_Navbar.php';
     require 'Vue/vue_Acceuil.php';
 ?>

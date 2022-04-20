@@ -17,6 +17,7 @@ create table if not exists produit (
     qteActuelle int not null,
     qteFixeReapro int not null,
     prixUnitaire money not null,
+    descriptionP varchar default 'A venir' not null,
     primary key (idProduit)
 );
 
@@ -28,8 +29,8 @@ create table if not exists personne (
     rue varchar not null,
     ville varchar not null,
     cp int not null,
-    email varchar not null,
-    identifiant varchar not null,
+    email varchar not null UNIQUE,
+    identifiant varchar not null UNIQUE,
     mdp varchar not null,
     numTel int not null,
     nbPointFidelite int default 0 not null,
@@ -40,7 +41,7 @@ drop table if exists client;
 create table if not exists client (
     idPersonne serial not null,
     statutCLient TClient default 'active' not null,
-    nbCommandeEchouee int not null,
+    nbCommandeEchouee int default 0 not null,
     primary key (idPersonne)
 );
 
@@ -111,13 +112,13 @@ alter table contient
 -- Chargement des valeurs dans les tables
 --
 
-insert into produit (libelle,qteActuelle,qteFixeRepro,prixUnitaire) values
+insert into produit (libelle,qteActuelle,qteFixeReapro,prixUnitaire) values
 ('ordinateur',200,400,600),
 ('video game',250,600,300),
 ('telephone portable',700,500,550),
 ('télévision',350,550,800),
 ('airpods',390,750,400),
-('machine à laver',250,420,300);,
+('machine à laver',250,420,300),
 ('aspirateur',800,360,300);
 
 insert into personne (nom, prenom, rue, ville, cp, email, identifiant, mdp, numTel, nbPointFidelite) values
@@ -130,30 +131,33 @@ insert into personne (nom, prenom, rue, ville, cp, email, identifiant, mdp, numT
 ('francois' ,'holland' ,'12 rue sain dezier' ,'nancy' ,45000, 'francois.holland@gmail.com' ,'fh45' ,'081245' ,'0645127803' ,10),
 ('fatma' ,'sellami' ,'9 rue jacquinoit' ,'nancy' ,45000, 'fatma.sellami@gmail.com' ,'fs04' ,'362514' ,'0678956231' ,15);
 
-insert into commande (idClient ,idPreparateur, dateCommande ,heureCommande ,heureMaxPaiement ,montantPaiement , nbPointUtilise ,statutCommande TStatutCommande) values
-(1,11,'2022-04-19', '10:00:00' ,'22:00:00',300,5,'preteAComposer'),
-(2,12,'2022-04-11', '10:00:00' ,'22:00:00',400,5,'enCompostion'),
-(3,13,'2022-04-12', '10:00:00' ,'22:00:00',600,5,'compositionValidee'), 
-(4,14,'2022-04-13', '10:00:00' ,'22:00:00',300,10,'enLivraison'), 
-(5,15,'2022-04-14', '10:00:00' ,'22:00:00',400,4,'enCompostion'), 
-(6,16,'2022-04-15', '10:00:00' ,'22:00:00',600,5,'compositionValidee');
-
-insert into client (idPersonne,statutClient,nbCommandeEchoue) values 
+insert into client (idPersonne,statutClient,nbCommandeEchouee) values 
 (1,'active',0),
-(2,'active',1)
+(2,'active',1),
 (3,'bloque',4),
 (4,'active',2),
-(5,'bloque',5),
-(6,'active',1),
-(7,'bloque',5),
-(8,'active',1);
+(5,'bloque',5);
+
+insert into employe (idPersonne,matricule) values
+(6,447183),
+(7,478546),
+(8,447856);
+
+insert into commande (idClient, idPreparateur, dateCommande, heureCommande, heureMaxPaiement,  montantPaiement, nbPointUtilise, statutCommande) values
+(1,8,'2022-04-19', '10:00:00','22:00:00', 300, 5, 'preteAComposer'),
+(2,8,'2022-04-11', '10:00:00','22:00:00', 400, 5, 'enCompostion'),
+(3,8,'2022-04-12', '10:00:00','22:00:00', 600, 5, 'compositionValidee'), 
+(4,8,'2022-04-13', '10:00:00','22:00:00', 300, 10, 'enLivraison'), 
+(5,8,'2022-04-14', '10:00:00','22:00:00', 400, 4, 'enCompostion'), 
+(1,8,'2022-04-15', '10:00:00','22:00:00', 600, 5, 'compositionValidee');
+
 
 insert into planningLivraison (idCommande ,idLivreur, dateLivraison ,heureLivraison ,quai) values
-(1,17,'2022-04-10','11:00:00',2),
-(2,16,'2022-04-11','12:00:00',4),
-(3,15,'2022-04-11','11:00:00',3),
-(4,17,'2022-04-12','12:00:00',1),
-(5,16,'2022-04-13','13:00:00',5);
+(1, 6, '2022-04-10', '11:00:00', 2),
+(2, 7, '2022-04-11', '12:00:00', 4),
+(3, 7, '2022-04-11', '11:00:00', 3),
+(4, 7, '2022-04-12', '12:00:00', 1),
+(5, 6, '2022-04-13', '13:00:00', 5);
 
 insert into contient (idProduit ,idCommande ,qteProduit) values 
 (1,1,1),
@@ -162,12 +166,3 @@ insert into contient (idProduit ,idCommande ,qteProduit) values
 (4,4,5),
 (5,5,4),
 (6,6,3);
-
-insert into employe (idPersonne,matricule) values
-(11,447183),
-(12,478546),
-(13,447856),
-(14,497854),
-(15,478955),
-(16,485210),
-(17,492582);

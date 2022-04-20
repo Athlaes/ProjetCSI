@@ -11,7 +11,13 @@
     $uc = $_GET['uc'];
     switch ($uc) {
         case 'Acceuil':
-            require 'Controleur/c_Navbar.php';
+            require 'Controleur/c_Acceuil.php';
+            break;
+        case 'Connexion':
+            require 'Controleur/c_Connexion.php';
+            break;
+        case 'Deconnexion':
+            $_SESSION['UserConnecte'] = null;
             require 'Controleur/c_Acceuil.php';
             break;
     }

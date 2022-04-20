@@ -1,0 +1,99 @@
+body {
+    font-family: Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+
+.navbar {
+    display: flex;
+    width: 100%;
+    height: 50px;
+    background-color: #282A35;
+    justify-content: space-between;
+    color: white;
+}
+
+.navbar a {
+    color : white;
+}
+
+.navbar a i{
+    padding-left: 20px;
+}
+
+.navbar a:hover {
+    color : white;
+    text-decoration: none;
+    font-size: larger;
+}
+
+.main-conteneur {
+    display: flex;
+    background-color: #282a35b2;
+    margin-top: 20px;
+    width: 80%;
+    justify-content: center;
+    width: 80%;
+    border-radius: 50px;
+    padding: 0px;
+}
+
+.main-conteneur .centree {
+    width: 80%;
+}
+
+.main-conteneur table {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.main-conteneur .connexion {
+    display:flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.main-conteneur .connexion div {
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+    margin : 50px;
+}
+
+.main-conteneur .connexion div form {
+    display: flex;
+    flex-grow : 1;
+    justify-content: center;
+    flex-flow : column nowrap;
+}
+
+.main-conteneur .connexion div form input {
+    max-height: 30px;
+    width: 70%;
+}
+
+.main-conteneur .connexion div form div {
+    margin: 10px;
+}
+
+.main-conteneur .connexion div form label {
+    color: white;
+    margin-right: 20px;
+    margin-left: 10px;
+    font-weight: bold;
+    font-size: 11pt;
+}
+
+.main-conteneur .connexion div form .btn {
+    justify-self: center;
+    align-self: center;
+    max-width: 150px;
+}
+
+.main-conteneur .connexion div form {
+    color: white;
+    margin-left: 10px;
+}
