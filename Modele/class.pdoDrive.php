@@ -80,4 +80,16 @@ class PdoDrive {
             echo $e->getMessage();
         }
     }
+
+    public static function getProduit($id){
+        try {
+            $requete = PdoDrive::$monPdo->prepare('select * from produit where idproduit = :id');
+            $requete->bindParam(':id', $id, PDO::PARAM_INT);
+            $requete->execute();
+            $produit = $requete->fetch();
+            return $produit;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
 }

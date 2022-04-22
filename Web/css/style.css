@@ -13,6 +13,8 @@ body {
     background-color: #282A35;
     justify-content: space-between;
     color: white;
+    flex-flow: row nowrap;
+    z-index: 0;
 }
 
 .navbar a {
@@ -20,13 +22,32 @@ body {
 }
 
 .navbar a i{
-    padding-left: 20px;
+    padding-left: 10px;
 }
 
 .navbar a:hover {
     color : white;
     text-decoration: none;
     font-size: larger;
+    z-index: -1;
+}
+
+.navbar a p {
+    display: inline;
+    padding: 0 5px 1px 5px;
+    margin: 0;
+    position: relative;
+    top: -10px;
+    left: -6px;
+    /* text-shadow: 1px 1px 0px #000000, -1px -1px 0px #000000, -1px 1px 0px #000000, 1px -1px 0px #000000; */
+    background-color: #cc0000;
+    border-radius: 10px;
+    font-size: 12pt;
+}
+
+.navbar h5 {
+    display: inline;
+    margin-right: 20px;
 }
 
 .main-conteneur {
@@ -96,4 +117,24 @@ body {
 .main-conteneur .connexion div form {
     color: white;
     margin-left: 10px;
+}
+
+.main-conteneur .total {
+    display: flex;
+    flex-flow : row nowrap;
+    justify-content: space-between;
+    color : white;
+    width: 100%;
+    padding: 10px;
+}
+
+.main-conteneur .total div {
+    justify-self: flex-start;
+    text-align: left;
+}
+
+.main-conteneur .total div:nth-child(2) {
+    border-left: #ffffff 2px solid;
+    padding-left: 40px;
+    margin-right: 30px;
 }

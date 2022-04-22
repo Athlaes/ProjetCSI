@@ -4,6 +4,7 @@
 
     $db = PdoDrive::getPdoDrive();
     session_start();
+    // $_SESSION["Panier"] = array($key=>$value);
     require 'Vue/vue_header.html';
     if (!isset($_GET['uc'])) {
         $_GET['uc'] = "Acceuil";
@@ -18,7 +19,11 @@
             break;
         case 'Deconnexion':
             $_SESSION['UserConnecte'] = null;
+            $_SESSION['Panier'] = array();
             require 'Controleur/c_Acceuil.php';
+            break;
+        case 'Panier' :
+            require 'Controleur/c_Panier.php';
             break;
     }
     require_once 'Vue/vue_footer.html';

@@ -3,13 +3,17 @@
         <h3>Le drive</h3>
     </div>
     <div>
-        <div>
-            <h5>
-                <a href="index.php?uc=Acceuil">Acceuil</a>
-            </h5>
-        </div>
+        <h5>
+            <a href="index.php?uc=Acceuil">Acceuil</a>
+        </h5>
+        <h5>
+            <a href="#">Mes commandes</a>
+        </h5>
     </div>
     <div>
+        <h5>
+            <a href="index.php?uc=Panier"><i class="fa-solid fa-cart-shopping"></i><p><?php echo count($_SESSION['Panier']); ?></p></a>
+        </h5>
         <h5>
             <?php
                 if (!isset($_SESSION['UserConnecte'])) {

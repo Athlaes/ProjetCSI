@@ -24,8 +24,8 @@
                         <?php echo $produit->prixunitaire; ?>
                     </td>
                     <td>
-                        <form action="index.php?uc=ajouterPanier" method="post">
-                            <input type="hidden" name="tIdItem" id="tIdItrem" value="<?php echo $produit->idproduit; ?>">
+                        <form action="index.php?uc=Acceuil" method="post">
+                            <input type="hidden" name="tIdItem" id="tIdItem" value="<?php echo $produit->idproduit; ?>">
                             <button type="submit" name="Action" id="Action" value="AjouterProduit"><i class="fa-solid fa-cart-arrow-down"></i></button>
                         </form>
                     </td>
