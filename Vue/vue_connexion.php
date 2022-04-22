@@ -34,7 +34,7 @@
                 </div>
                 <div>
                     <label for="txtEmail">E-mail</label>
-                    <input type="email" name="txtEmail" id="txtEmail">
+                    <input type="email" name="txtEmail" id="txtEmail"> 
                 </div>
                 <div>
                     <label for="txtIdentifiant">Identifiant</label>

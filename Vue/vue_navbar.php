@@ -7,7 +7,7 @@
             <a href="index.php?uc=Acceuil">Acceuil</a>
         </h5>
         <h5>
-            <a href="#">Mes commandes</a>
+            <a href="index.php?uc=Commandes">Mes commandes</a>
         </h5>
     </div>
     <div>

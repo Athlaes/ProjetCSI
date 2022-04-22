@@ -92,4 +92,48 @@ class PdoDrive {
             echo $e->getMessage();
         }
     }
+
+    public static function validerCommande($montant, $nbPoint){
+        try{
+            $requete = PdoDrive::$monPdo->prepare("insert into commande (idclient, datecommande, heurecommande, heuremaxpaiement, montantpaiement, nbpointutilise) values (:idClient, CURRENT_DATE, CURRENT_TIME, CURRENT_TIME+interval '12 hours', :montant, :nbPoint);");
+            $requete->bindParam(':id', $_SESSION['UserConnecte']->idpersonne, PDO::PARAM_INT);
+            $requete->bindParam(':montant', $montant, PDO::PARAM_INT);
+            $requete->bindParam(':nbPoint', $nbPoint, PDO::PARAM_INT);
+            $requete->execute();
+            $idCommande = PdoDrive::$monPdo->lastInsertId();
+            foreach ($_SESSION['Panier'] as $produit) { 
+                $requete = PdoDrive::$monPdo->prepare('insert into contient (idproduit, idcommande, qteproduit) values (:idProduit, :idCommande, :qteProduit);');
+                $requete->bindParam(':idProduit', $produit->idproduit, PDO::PARAM_INT);
+                $requete->bindParam(':idCommande', $idCommande, PDO::PARAM_INT);
+                $requete->bindParam(':qteProduit', $produit->qte, PDO::PARAM_INT);
+                $requete->execute();
+            }
+        } catch (PDOException $e){  
+            echo $e->getMessage();
+        }
+
+    }
+
+    public static function getCommandes() {
+        try {
+            $tbCommandesProduits = array();
+            $requeteCommande = PdoDrive::$monPdo->prepare('select * from commande com where idclient = :idClient');
+            $requeteCommande->bindParam(':idClient', $_SESSION['UserConnecte']->idpersonne, PDO::PARAM_INT);
+            $requeteCommande->execute();
+            $tbCommandes = $requeteCommande->fetchAll();
+            foreach ($tbCommandes as $commande) {
+                $requeteProduit = PdoDrive::$monPdo->prepare('select * from contient right join produit p on p.idproduit = contient.idproduit where idcommande = :idCommande;');
+                $requeteProduit->bindParam(':idCommande', $commande->idcommande, PDO::PARAM_INT);
+                $requeteProduit->execute();
+                $tbProduits = $requeteProduit->fetchAll();
+                $ptbCommandeProduits['Commande'] = $commande;
+                $ptbCommandeProduits['Produits'] = $tbProduits;
+                array_push($tbCommandesProduits, $ptbCommandeProduits);
+            }
+
+            return $tbCommandesProduits;
+        } catch (PDOException $e){  
+            echo $e->getMessage();
+        }
+    }    
 }

@@ -56,13 +56,13 @@ drop table if exists commande;
 create table if not exists commande (
     idCommande serial not null,
     idClient serial not null,
-    idPreparateur serial,
+    idPreparateur int,
     dateCommande date,
     heureCommande time,
     heureMaxPaiement time,
     montantPaiement money default 0 not null,
     nbPointUtilise int default 0 not null,
-    statutCommande TStatutCommande not null,
+    statutCommande TStatutCommande not null default 'passee',
     primary key (idCommande)
 );
 

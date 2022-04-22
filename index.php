@@ -25,6 +25,9 @@
         case 'Panier' :
             require 'Controleur/c_Panier.php';
             break;
+        case 'Commandes':
+            require 'Controleur/c_Commandes.php';
+            break;
     }
     require_once 'Vue/vue_footer.html';
     $db = null;

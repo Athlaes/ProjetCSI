@@ -42,9 +42,10 @@
     </div>
 </section>
 <section class="main-conteneur">
-    <div class='total'>
+    <form class="total" action="index.php?uc=ValiderCommande" method="post">
         <div>
-            <!-- Voici le total de votre panier : -->
+            <h5 for="nbPoint">Souhaitez-vous utiliser des points ?</h5>
+            <input type="number" name="nbPoint" id="nbPoint" max="<?php echo $_SESSION['UserConnecte']->nbpointfidelite; ?>"><p style="display: inline; font-size: 14pt;"> / <?php echo $_SESSION['UserConnecte']->nbpointfidelite; ?> pts MAX</p>
         </div>
         <div>
             <h5>Total : 
@@ -56,9 +57,8 @@
                 echo $total.' €';
                 ?>
             </h5>
-            <form action="index.php?uc=ValiderCommande" method="post">
-                <button class="btn btn-primary" type="submit" name="Action" id="Action" value="validerCommande">Valider la commande</button>
-            </form>
+            <input type="hidden" name="montantData" id="montantData">
+            <button class="btn btn-primary" type="submit" name="Action" id="Action" value="validerCommande">Valider la commande</button>
         </div>
-    </div>
+    </form>
 </section>
