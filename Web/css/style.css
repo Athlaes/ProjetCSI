@@ -146,3 +146,25 @@ body {
 .main-conteneur .centree h3 {
     color : white;
 }
+
+.main-conteneur .centree form {
+    display : inline;
+}
+
+.main-conteneur .centree.flex{
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.main-conteneur .centree.flex div{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+
+.main-conteneur .centree h3.alignend {
+    color : white;
+    display : inline;
+    border-left: white 2px solid;
+    padding-left: 40px;
+}

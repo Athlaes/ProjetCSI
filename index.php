@@ -19,6 +19,7 @@
             break;
         case 'Deconnexion':
             $_SESSION['UserConnecte'] = null;
+            $_SESSION['Employe'] = null;
             $_SESSION['Panier'] = array();
             require 'Controleur/c_Acceuil.php';
             break;

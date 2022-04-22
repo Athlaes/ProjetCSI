@@ -2,7 +2,7 @@
     foreach ($tbCommandes as $commande) {
         ?>
             <section class="main-conteneur"> 
-                <div class="centree">
+                <div class="centree flex">
                     <div>
                         <h3>Commande n°<?php echo $commande['Commande']->idcommande.' - '.$commande['Commande']->statutcommande; ?>
                         </h3>
@@ -39,23 +39,28 @@
                             ?>
                         </tbody>
                     </table>
-                    <?php
-                        if ($commande['Commande']->statutcommande == 'passee') {
+                    <div>
+                        <?php
+                            if ($commande['Commande']->statutcommande == 'passee') {
+                                ?>
+                                <form action="index.php?uc=Panier" method="post">
+                                    <button class="btn btn-primary" type="submit" name="Action" id="Action" value="modifQuantite">Payer sa commande</button>
+                                    <button class="btn btn-warning" type="submit" name="Action" id="Action" value="modifCommande">Modifier sa commande</button>
+                                    <button class="btn btn-danger" type="submit" name="Action" id="Action" value="supprimerProduit">Annuler sa commande</button>
+                                </form>
+                                <?php
+                            }else {
+                                ?>
+                                <form action="index.php?uc=Panier" method="post">
+                                    <button class="btn btn-primary" type="submit" name="Action" id="Action" value="modifQuantite" disabled>Payer sa commande</button>
+                                    <button class="btn btn-warning" type="submit" name="Action" id="Action" value="modifCommande" disabled>Modifier sa commande</button>
+                                    <button class="btn btn-danger" type="submit" name="Action" id="Action" value="supprimerProduit" disabled>Annuler sa commande</button>
+                                </form>
+                                <?php
+                            }
                             ?>
-                            <form action="index.php?uc=Panier" method="post">
-                                <button class="btn btn-primary" type="submit" name="Action" id="Action" value="modifQuantite">Payer sa commande</button>
-                                <button class="btn btn-danger" type="submit" name="Action" id="Action" value="supprimerProduit">Annuler sa commande</button>
-                            </form>
-                            <?php
-                        }else {
-                            ?>
-                            <form action="index.php?uc=Panier" method="post">
-                                <button class="btn btn-primary" type="submit" name="Action" id="Action" value="modifQuantite" disabled>Payer sa commande</button>
-                                <button class="btn btn-danger" type="submit" name="Action" id="Action" value="supprimerProduit" disabled>Annuler sa commande</button>
-                            </form>
-                            <?php
-                        }
-                    ?>
+                        <h3 class='alignend'>Total : <?php echo $commande['Commande']->montantpaiement; ?></h3>
+                    </div>
                 </div>
             </section>
         <?php
