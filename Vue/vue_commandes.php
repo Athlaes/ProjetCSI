@@ -43,10 +43,10 @@
                         <?php
                             if ($commande['Commande']->statutcommande == 'passee') {
                                 ?>
-                                <form action="index.php?uc=Panier" method="post">
-                                    <button class="btn btn-primary" type="submit" name="Action" id="Action" value="modifQuantite">Payer sa commande</button>
+                                <form action="index.php?uc=Commandes" method="post">
+                                    <button class="btn btn-primary" type="submit" name="Action" id="Action" value="payerCommande">Payer sa commande</button>
                                     <button class="btn btn-warning" type="submit" name="Action" id="Action" value="modifCommande">Modifier sa commande</button>
-                                    <button class="btn btn-danger" type="submit" name="Action" id="Action" value="supprimerProduit">Annuler sa commande</button>
+                                    <button class="btn btn-danger" type="submit" name="Action" id="Action" value="supprimerCommande">Annuler sa commande</button>
                                 </form>
                                 <?php
                             }else {

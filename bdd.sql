@@ -166,3 +166,9 @@ insert into contient (idProduit ,idCommande ,qteProduit) values
 (4,4,5),
 (5,5,4),
 (6,6,3);
+
+
+--
+-- Contraintes d'intégrité
+--
+

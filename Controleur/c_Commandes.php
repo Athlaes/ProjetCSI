@@ -5,6 +5,11 @@
             case 'validerPaiement':
                 
                 break;
+            case 'validerCommande':
+                $montant = $_POST['montantData'];
+                $nbPointCommande = $_POST['txtNbPoint'];
+                $db->validerCommande($montant, $nbPointCommande);
+                break;
         }
     }
 

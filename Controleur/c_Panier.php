@@ -8,11 +8,6 @@
             case 'supprimerProduit':
                 unset($_SESSION['Panier'][$_POST['iData']]);
                 break;
-            case 'validerCommande':
-                $montant = $_POST['montantData'];
-                $nbPointUtilise = $_POST['nbPoint'];
-                $db->createCommande($montant, $nbPointUtilise);
-                break;
         }
     }
     

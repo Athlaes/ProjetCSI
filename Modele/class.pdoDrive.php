@@ -95,17 +95,18 @@ class PdoDrive {
 
     public static function validerCommande($montant, $nbPoint){
         try{
-            $requete = PdoDrive::$monPdo->prepare("insert into commande (idclient, datecommande, heurecommande, heuremaxpaiement, montantpaiement, nbpointutilise) values (:idClient, CURRENT_DATE, CURRENT_TIME, CURRENT_TIME+interval '12 hours', :montant, :nbPoint);");
-            $requete->bindParam(':id', $_SESSION['UserConnecte']->idpersonne, PDO::PARAM_INT);
-            $requete->bindParam(':montant', $montant, PDO::PARAM_INT);
+            $requete = PdoDrive::$monPdo->prepare("insert into commande (idclient, datecommande, heurecommande, heuremaxpaiement, montantpaiement, nbpointutilise) values 
+            (:idClient, CURRENT_DATE, CURRENT_TIME, CURRENT_TIME+interval'12 hours', :montant, :nbPoint);");
+            $requete->bindParam(':idClient', $_SESSION['UserConnecte']->idpersonne, PDO::PARAM_INT);
+            $requete->bindParam(':montant', $montant, PDO::PARAM_STR);
             $requete->bindParam(':nbPoint', $nbPoint, PDO::PARAM_INT);
             $requete->execute();
             $idCommande = PdoDrive::$monPdo->lastInsertId();
             foreach ($_SESSION['Panier'] as $produit) { 
                 $requete = PdoDrive::$monPdo->prepare('insert into contient (idproduit, idcommande, qteproduit) values (:idProduit, :idCommande, :qteProduit);');
-                $requete->bindParam(':idProduit', $produit->idproduit, PDO::PARAM_INT);
-                $requete->bindParam(':idCommande', $idCommande, PDO::PARAM_INT);
-                $requete->bindParam(':qteProduit', $produit->qte, PDO::PARAM_INT);
+                $requete->bindParam(':idProduit', $produit->idproduit, PDO::PARAM_STR);
+                $requete->bindParam(':idCommande', $idCommande, PDO::PARAM_STR);
+                $requete->bindParam(':qteProduit', $produit->qte, PDO::PARAM_STR);
                 $requete->execute();
             }
         } catch (PDOException $e){  
@@ -136,4 +137,12 @@ class PdoDrive {
             echo $e->getMessage();
         }
     }    
+
+    public static function getEmploye(){
+        try{
+
+        } catch (PDOException $e){  
+            echo $e->getMessage();
+        }
+    }
 }

@@ -17,10 +17,10 @@
                 if (isset($_SESSION['Employe'])) {
                     ?>
                     <h5>
-                        <a href="index.php?uc=Planning">Planning composition</a>
+                        <a href="index.php?uc=PlanningCompo">Planning composition</a>
                     </h5>
                     <h5>
-                        <a href="index.php?uc=Planning">Planning livraison</a>
+                        <a href="index.php?uc=PlanningLivraison">Planning livraison</a>
                     </h5>
                     <?php if ($_SESSION['Employe']->responsable == 1) {
                         ?>
