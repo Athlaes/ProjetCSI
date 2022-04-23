@@ -3,14 +3,22 @@
         $action = $_POST['Action'];
         switch ($action) {
             case 'modifQuantite':
-                $_SESSION['Panier'][$_POST['iData']]->qte = $_POST['nbProduit'];
+                foreach ($_SESSION['Panier'] as $produit) {
+                    if ($produit->idproduit == $_POST['idData']) {
+                        $produit->qte = $_POST['nbProduit'];
+                    }
+                }
                 break;
             case 'supprimerProduit':
-                unset($_SESSION['Panier'][$_POST['iData']]);
+                foreach ($_SESSION['Panier'] as $key => $produit) {
+                    if ($produit->idproduit == $_POST['idData']) {
+                        $produit = (array) $produit;
+                        unset($_SESSION['Panier'][$key]);
+                    }
+                }
                 break;
         }
     }
     
-    // $tbPanier = $db->getProduitsPanier();
     require 'Controleur/c_Navbar.php';
     require 'Vue/vue_Panier.php';

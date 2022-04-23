@@ -7,7 +7,16 @@
                 $produit = (array) $produit;
                 $produit['qte'] = 1;
                 $produit = (object) $produit;
-                array_push($_SESSION['Panier'], $produit);
+                $find = false;
+                foreach ($_SESSION['Panier'] as $produitP) {
+                    if ($produitP->idproduit == $produit->idproduit) {
+                        $produitP->qte+= 1;
+                        $find = true;
+                    }
+                }
+                if ($find == false) {
+                    array_push($_SESSION['Panier'], $produit);
+                }
                 break;
         } 
     }

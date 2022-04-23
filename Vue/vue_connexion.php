@@ -45,6 +45,10 @@
                     <input type="password" name="txtPassword" id="txtPassword">
                 </div>
                 <div>
+                    <label for="tel">Numéro de téléphone</label>
+                    <input type="tel" name="tel" id="tel">
+                </div>
+                <div>
                     <label for="txtNom">Nom</label>
                     <input type="text" name="txtNom" id="txtNom">
                     <label for="txtPrenom">Prenom</label>
@@ -57,6 +61,8 @@
                 <div>
                     <label for="txtVille">Ville</label>
                     <input type="text" name="txtVille" id="txtVille">
+                    <label for="nbCP">Code postal</label>
+                    <input type="number" name="nbCP" id="nbCP">
                 </div>
                 <button class="btn btn-primary" type="submit" id="Action" name="Action" value="sinscrire">S'inscrire</button>
             </form>

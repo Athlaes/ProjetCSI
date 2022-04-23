@@ -162,7 +162,7 @@ body {
     justify-content: space-between;
 }
 
-.main-conteneur .centree h3.alignend {
+.main-conteneur .centree .alignend {
     color : white;
     display : inline;
     border-left: white 2px solid;

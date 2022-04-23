@@ -9,9 +9,13 @@
                 $montant = $_POST['montantData'];
                 $nbPointCommande = $_POST['txtNbPoint'];
                 $db->validerCommande($montant, $nbPointCommande);
+                $_SESSION['Panier'] = array();
                 break;
             case 'supprimerCommande':
                 $db-> supprimerCommande($_POST['idData']);
+                break;
+            case 'confirmerDHLivraison':
+                $db->updatePlanning($_POST['dateLivraison'], $_POST['hLivraison'], $_POST['idData']);
                 break;
         }
     }

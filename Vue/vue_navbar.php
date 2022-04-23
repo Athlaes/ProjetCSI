@@ -26,7 +26,7 @@
                     if ($_SESSION['Employe']->responsable == true) {
                         ?>
                         <h5>
-                            <a href="index.php?uc=Client">Deblocage client</a>
+                            <a href="index.php?uc=Clients">Deblocage client</a>
                         </h5>
                         <?php 
                     }

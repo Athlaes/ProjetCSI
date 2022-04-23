@@ -19,7 +19,21 @@
                 }
                 break;
             case 'sinscrire':
-                // $_POST[];
+                $user = (object) array(
+                    "nom" => $_POST["txtNom"], 
+                    "email" => $_POST["txtEmail"], 
+                    "identifiant" => $_POST["txtIdentifiant"],
+                    "pwd" => $_POST["txtPassword"],
+                    "prenom" => $_POST["txtPrenom"],
+                    "rue" => $_POST["txtRue"],
+                    "ville" => $_POST["txtVille"],
+                    "tel" =>  $_POST["tel"],
+                    "CP" =>  $_POST["nbCP"],
+                );
+                $idUser = $db->ajouterUtilisateur($user);
+                $userConnecte = $db->getUserInformation($idUser);
+                $_SESSION['UserConnecte'] = $userConnecte;
+                header('Location: index.php?uc=Acceuil');
                 break;
         }
     }

@@ -8,7 +8,6 @@
             </thead>
             <tbody>
             <?php
-                $iPanier = 0;
                 foreach ($_SESSION['Panier'] as $produit) {
                     ?>
                     <tr>
@@ -20,7 +19,7 @@
                         </td>
                         <td>
                             <form action="index.php?uc=Panier" method="post">
-                                <input type="hidden" name="iData" id="iData" value="<?php echo $iPanier;?>">
+                                <input type="hidden" name="idData" id="idData" value="<?php echo $produit->idproduit;?>">
                                 <input style="max-width:50px;" type="number" name="nbProduit" id="nbProduit" value="<?php echo $produit->qte; ?>">
                                 <button class="btn btn-primary" type="submit" name="Action" id="Action" value="modifQuantite">Valider les quantités</button>
                                 <button class="btn btn-danger" type="submit" name="Action" id="Action" value="supprimerProduit">Supprimer article</button>
@@ -34,7 +33,6 @@
                         </td>
                     </tr>
                     <?php
-                    $iPanier++;
                 }
                 ?>
             </tbody>

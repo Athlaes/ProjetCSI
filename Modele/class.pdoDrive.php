@@ -26,21 +26,22 @@ class PdoDrive {
 
     public static function ajouterUtilisateur($user){
         try{
-            $requete = PdoDrive::$monPdo->prepare('insert into Personne (nom, prenom, nom, rue, ville, cp, email, identifiant, mdp, numTel) values (:nom, :prenom, :nom, :rue, :ville, :cp, :email, :identifiant, :mdp, :numTel)');
+            $requete = PdoDrive::$monPdo->prepare('insert into personne (nom, prenom, rue, ville, cp, email, identifiant, mdp, numTel) values (:nom, :prenom, :rue, :ville, :cp, :email, :identifiant, :mdp, :numTel)');
             $requete->bindParam(':nom', $user->nom, PDO::PARAM_STR);
             $requete->bindParam(':prenom', $user->prenom, PDO::PARAM_STR);
             $requete->bindParam(':rue', $user->rue, PDO::PARAM_STR);
             $requete->bindParam(':ville', $user->ville, PDO::PARAM_STR);
-            $requete->bindParam(':cp', $user->cp, PDO::PARAM_INT);
+            $requete->bindParam(':cp', $user->CP, PDO::PARAM_INT);
             $requete->bindParam(':email', $user->email, PDO::PARAM_STR);
             $requete->bindParam(':identifiant', $user->identifiant, PDO::PARAM_STR);
-            $requete->bindParam(':mdp', $user->mdp, PDO::PARAM_STR);
-            $requete->bindParam(':numTel', $user->numTel, PDO::PARAM_STR);
+            $requete->bindParam(':mdp', $user->pwd, PDO::PARAM_STR);
+            $requete->bindParam(':numTel', $user->tel, PDO::PARAM_INT);
             $requete->execute();
             $id = PdoDrive::$monPdo->lastInsertId();
             $requete_client = PdoDrive::$monPdo->prepare('insert into client (idPersonne) values (:id)');
             $requete_client->bindParam(':id', $id, PDO::PARAM_INT);
             $requete_client->execute();
+            return $id;
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
@@ -104,11 +105,14 @@ class PdoDrive {
             $idCommande = PdoDrive::$monPdo->lastInsertId();
             foreach ($_SESSION['Panier'] as $produit) { 
                 $requete = PdoDrive::$monPdo->prepare('insert into contient (idproduit, idcommande, qteproduit) values (:idProduit, :idCommande, :qteProduit);');
-                $requete->bindParam(':idProduit', $produit->idproduit, PDO::PARAM_STR);
-                $requete->bindParam(':idCommande', $idCommande, PDO::PARAM_STR);
-                $requete->bindParam(':qteProduit', $produit->qte, PDO::PARAM_STR);
+                $requete->bindParam(':idProduit', $produit->idproduit, PDO::PARAM_INT);
+                $requete->bindParam(':idCommande', $idCommande, PDO::PARAM_INT);
+                $requete->bindParam(':qteProduit', $produit->qte, PDO::PARAM_INT);
                 $requete->execute();
             }
+            $requete = PdoDrive::$monPdo->prepare('insert into planninglivraison(idcommande) values (:idCommande)');
+            $requete->bindParam(':idCommande', $idCommande, PDO::PARAM_INT);
+            $requete->execute();
         } catch (PDOException $e){  
             echo $e->getMessage();
         }
@@ -118,7 +122,7 @@ class PdoDrive {
     public static function getCommandes() {
         try {
             $tbCommandesProduits = array();
-            $requeteCommande = PdoDrive::$monPdo->prepare('select * from commande com where idclient = :idClient order by datecommande desc');
+            $requeteCommande = PdoDrive::$monPdo->prepare('select * from commande com natural join planninglivraison pla where idclient = :idClient order by datecommande desc, heurecommande desc');
             $requeteCommande->bindParam(':idClient', $_SESSION['UserConnecte']->idpersonne, PDO::PARAM_INT);
             $requeteCommande->execute();
             $tbCommandes = $requeteCommande->fetchAll();
@@ -151,6 +155,9 @@ class PdoDrive {
 
     public static function supprimerCommande($id){
         try{
+            $requete = PdoDrive::$monPdo->prepare("Delete from planninglivraison * where idcommande = :id");
+            $requete->bindParam(':id', $id, PDO::PARAM_INT);
+            $requete->execute();
             $requete = PdoDrive::$monPdo->prepare("Delete from contient * where idcommande = :id");
             $requete->bindParam(':id', $id, PDO::PARAM_INT);
             $requete->execute();
@@ -174,7 +181,7 @@ class PdoDrive {
 
     public static function getCommandes20(){
         try{
-            $requete = PdoDrive::$monPdo->prepare("select * from commande natural join planninglivraison where datelivraison = current_date and current_time >= heureLivraison-interval'20 minutes' and (statutCommande >= 'preteAComposer' and statutCommande <= 'enComposition') order by statutcommande desc;");
+            $requete = PdoDrive::$monPdo->prepare("select * from commande natural join planninglivraison where datelivraison = current_date and heurelivraison <= current_time+interval'20 minutes' and (statutCommande >= 'preteAComposer' and statutCommande <= 'enComposition') order by statutcommande desc;");
             $requete->execute();
             $tbCommandes = $requete->fetchAll();
             return $tbCommandes;
@@ -253,6 +260,39 @@ class PdoDrive {
     public static function setLivraisonCote($idCommande){
         try{
             $requete = PdoDrive::$monPdo->prepare("update commande set statutcommande = 'miseDeCote' where idcommande= :idCommande");
+            $requete->bindParam(':idCommande', $idCommande, PDO::PARAM_INT);
+            $requete->execute();
+        } catch (PDOException $e){  
+            echo $e->getMessage();
+        }
+    }
+
+    public static function getClientsBloqué(){
+        try{
+            $requete = PdoDrive::$monPdo->prepare("select * from client natural join personne where statutclient = 'bloque'");
+            $requete->execute();
+            $tbClients = $requete->fetchAll();
+            return $tbClients;
+        } catch (PDOException $e){  
+            echo $e->getMessage();
+        }
+    }
+
+    public static function setClientActive($idClient){
+        try{
+            $requete = PdoDrive::$monPdo->prepare("update client set statutclient = 'active' where idpersonne = :idClient");
+            $requete->bindParam(':idClient', $idClient, PDO::PARAM_INT);
+            $requete->execute();
+        } catch (PDOException $e){  
+            echo $e->getMessage();
+        }
+    }
+
+    public static function updatePlanning($date, $heure, $idCommande){
+        try{
+            $requete = PdoDrive::$monPdo->prepare("update planninglivraison set datelivraison = :date, heurelivraison = :hlivraison where idcommande = :idCommande");
+            $requete->bindParam(':date', $date, PDO::PARAM_STR);
+            $requete->bindParam(':hlivraison', $heure, PDO::PARAM_STR);
             $requete->bindParam(':idCommande', $idCommande, PDO::PARAM_INT);
             $requete->execute();
         } catch (PDOException $e){  
