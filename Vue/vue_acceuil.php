@@ -3,7 +3,7 @@
         <table class="table table-dark">
             <thead>
                 <tr> 
-                   <th scope="col">Libelle</th><th scope="col">En stock</th><th scope="col">Description</th scope="col"><th scope="col">Prix unitaire</th><th>Panier</th>
+                   <th scope="col">Libelle</th><th scope="col">En stock</th><th scope="col">Description</th><th scope="col">Prix unitaire</th><th scope="col">Panier</th>
                 </tr>
             </thead>
             <tbody>

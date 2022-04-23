@@ -1,16 +1,16 @@
 <?php 
-    $mauvaisMatricule == false;
+    $mauvaisMatricule = false;
     if (isset($_POST['Action'])) {
         $action = $_POST['Action'];
         switch ($action) {
             case 'seConnecter':
                 $employe = $db->getEmploye($_POST['txtMatricule']);
-                if (isset($employe)) {
+                if (!empty($employe)) {
                     $_SESSION['Employe'] = $employe;
+                    header('Location: index.php?uc=PlanningComposition');
                 } else {
-                    $mauvaisMatricule == true;
+                    $mauvaisMatricule = true;
                 }
-                header('Location: index.php?uc=Planning');
                 break;
         }
     }

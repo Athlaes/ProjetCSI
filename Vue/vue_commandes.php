@@ -44,6 +44,7 @@
                             if ($commande['Commande']->statutcommande == 'passee') {
                                 ?>
                                 <form action="index.php?uc=Commandes" method="post">
+                                    <input type="hidden" name="idData" id="idData" value="<?php echo $commande['Commande']->idcommande; ?>">
                                     <button class="btn btn-primary" type="submit" name="Action" id="Action" value="payerCommande">Payer sa commande</button>
                                     <button class="btn btn-warning" type="submit" name="Action" id="Action" value="modifCommande">Modifier sa commande</button>
                                     <button class="btn btn-danger" type="submit" name="Action" id="Action" value="supprimerCommande">Annuler sa commande</button>

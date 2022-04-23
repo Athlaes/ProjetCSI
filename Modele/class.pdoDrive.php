@@ -118,7 +118,7 @@ class PdoDrive {
     public static function getCommandes() {
         try {
             $tbCommandesProduits = array();
-            $requeteCommande = PdoDrive::$monPdo->prepare('select * from commande com where idclient = :idClient');
+            $requeteCommande = PdoDrive::$monPdo->prepare('select * from commande com where idclient = :idClient order by datecommande desc');
             $requeteCommande->bindParam(':idClient', $_SESSION['UserConnecte']->idpersonne, PDO::PARAM_INT);
             $requeteCommande->execute();
             $tbCommandes = $requeteCommande->fetchAll();
@@ -131,16 +131,130 @@ class PdoDrive {
                 $ptbCommandeProduits['Produits'] = $tbProduits;
                 array_push($tbCommandesProduits, $ptbCommandeProduits);
             }
-
             return $tbCommandesProduits;
         } catch (PDOException $e){  
             echo $e->getMessage();
         }
     }    
 
-    public static function getEmploye(){
+    public static function getEmploye($matricule){
         try{
+            $requete = PdoDrive::$monPdo->prepare('select * from employe natural join personne where matricule = :matricule; ');
+            $requete->bindParam(':matricule', $matricule, PDO::PARAM_STR);
+            $requete->execute();
+            $employe = $requete->fetch();
+            return $employe;
+        } catch (PDOException $e){  
+            echo $e->getMessage();
+        }
+    }
 
+    public static function supprimerCommande($id){
+        try{
+            $requete = PdoDrive::$monPdo->prepare("Delete from contient * where idcommande = :id");
+            $requete->bindParam(':id', $id, PDO::PARAM_INT);
+            $requete->execute();
+            $requete = PdoDrive::$monPdo->prepare("Delete from commande * where idcommande = :id");
+            $requete->bindParam(':id', $id, PDO::PARAM_INT);
+            $requete->execute();
+        } catch (PDOException $e){  
+            echo $e->getMessage();
+        }
+    }
+
+    public static function payerCommande($id){
+        try{
+            $requete = PdoDrive::$monPdo->prepare("Update commande set statutcommande = 'preteAComposer' where idcommande = :id");
+            $requete->bindParam(':id', $id, PDO::PARAM_INT);
+            $requete->execute();
+        } catch (PDOException $e){  
+            echo $e->getMessage();
+        }
+    }
+
+    public static function getCommandes20(){
+        try{
+            $requete = PdoDrive::$monPdo->prepare("select * from commande natural join planninglivraison where datelivraison = current_date and current_time >= heureLivraison-interval'20 minutes' and (statutCommande >= 'preteAComposer' and statutCommande <= 'enComposition') order by statutcommande desc;");
+            $requete->execute();
+            $tbCommandes = $requete->fetchAll();
+            return $tbCommandes;
+        } catch (PDOException $e){  
+            echo $e->getMessage();
+        }
+    }
+
+    public static function setCommandeComposition($idCommande, $idPersonne){
+        try{
+            $requete = PdoDrive::$monPdo->prepare("update commande set idpreparateur = :idPersonne, statutcommande = 'enComposition' where idcommande= :idCommande");
+            $requete->bindParam(':idPersonne', $idPersonne, PDO::PARAM_INT);
+            $requete->bindParam(':idCommande', $idCommande, PDO::PARAM_INT);
+            $requete->execute();
+        } catch (PDOException $e){  
+            echo $e->getMessage();
+        }
+    }
+
+    public static function setCompositionValidee($idCommande){
+        try{
+            $requete = PdoDrive::$monPdo->prepare("update commande set statutcommande = 'compositionValidee' where idcommande= :idCommande");
+            $requete->bindParam(':idCommande', $idCommande, PDO::PARAM_INT);
+            $requete->execute();
+        } catch (PDOException $e){  
+            echo $e->getMessage();
+        }
+    }
+
+    public static function getCommandesLivraison(){
+        try{
+            $requete = PdoDrive::$monPdo->prepare("select * from commande natural join planninglivraison where datelivraison = current_date and ((statutcommande >= 'compositionValidee' and statutcommande <= 'enLivraison') or statutCommande = 'miseDeCote') order by statutcommande desc");
+            $requete->execute();
+            $tbCommandes = $requete->fetchAll();
+            return $tbCommandes;
+        } catch (PDOException $e){  
+            echo $e->getMessage();
+        }
+    }
+
+    public static function setQuai($quai, $idCommande){
+        try{
+            $requete = PdoDrive::$monPdo->prepare("update planninglivraison set quai = :quai where idcommande= :idCommande");
+            $requete->bindParam(':quai', $quai, PDO::PARAM_INT);
+            $requete->bindParam(':idCommande', $idCommande, PDO::PARAM_INT);
+            $requete->execute();
+        } catch (PDOException $e){  
+            echo $e->getMessage();
+        }
+    }
+
+    public static function setCommandeLivraison($idCommande, $idLivreur){
+        try{
+            $requete = PdoDrive::$monPdo->prepare("update commande set statutcommande = 'enLivraison' where idcommande= :idCommande;");
+            $requete->bindParam(':idCommande', $idCommande, PDO::PARAM_INT);
+            $requete->execute();
+            $requete = PdoDrive::$monPdo->prepare("update planninglivraison set idlivreur = :idLivreur where idcommande = :idCommande");
+            $requete->bindParam(':idLivreur', $idLivreur, PDO::PARAM_INT);
+            $requete->bindParam(':idCommande', $idCommande, PDO::PARAM_INT);
+            $requete->execute();
+        } catch (PDOException $e){  
+            echo $e->getMessage();
+        }
+    }
+
+    public static function setLivraisonValidee($idCommande){
+        try{
+            $requete = PdoDrive::$monPdo->prepare("update commande set statutcommande = 'Livree' where idcommande= :idCommande");
+            $requete->bindParam(':idCommande', $idCommande, PDO::PARAM_INT);
+            $requete->execute();
+        } catch (PDOException $e){  
+            echo $e->getMessage();
+        }
+    }
+
+    public static function setLivraisonCote($idCommande){
+        try{
+            $requete = PdoDrive::$monPdo->prepare("update commande set statutcommande = 'miseDeCote' where idcommande= :idCommande");
+            $requete->bindParam(':idCommande', $idCommande, PDO::PARAM_INT);
+            $requete->execute();
         } catch (PDOException $e){  
             echo $e->getMessage();
         }

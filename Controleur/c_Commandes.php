@@ -2,13 +2,16 @@
     if(isset($_POST['Action'])){
         $action = $_POST['Action'];
         switch ($action) {
-            case 'validerPaiement':
-                
+            case 'payerCommande':
+                $db->payerCommande($_POST['idData']);
                 break;
             case 'validerCommande':
                 $montant = $_POST['montantData'];
                 $nbPointCommande = $_POST['txtNbPoint'];
                 $db->validerCommande($montant, $nbPointCommande);
+                break;
+            case 'supprimerCommande':
+                $db-> supprimerCommande($_POST['idData']);
                 break;
         }
     }

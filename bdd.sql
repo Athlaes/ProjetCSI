@@ -2,7 +2,7 @@
 -- Type énuméré
 --
 
-create type TStatutCommande as enum ('passee', 'preteAComposer', 'enCompostion', 'compositionValidee', 'enLivraison', 'Livree', 'miseDeCote', 'Echouee');
+create type TStatutCommande as enum ('passee', 'preteAComposer', 'enComposition', 'compositionValidee', 'enLivraison', 'Livree', 'miseDeCote', 'Echouee');
 
 create type TClient as enum ('active', 'bloque');
 
@@ -49,6 +49,7 @@ drop table if exists employe;
 create table if not exists employe (
     idPersonne serial not null,
     matricule int not null UNIQUE,
+    responsable boolean not null default false,
     primary key (idPersonne)
 );
 
@@ -79,7 +80,7 @@ drop table if exists planningLivraison;
 create table if not exists planningLivraison (
     idLivraison serial not null,
     idCommande serial not null,
-    idLivreur serial,
+    idLivreur int,
     dateLivraison date,
     heureLivraison time,
     quai int,
@@ -145,10 +146,10 @@ insert into employe (idPersonne,matricule) values
 
 insert into commande (idClient, idPreparateur, dateCommande, heureCommande, heureMaxPaiement,  montantPaiement, nbPointUtilise, statutCommande) values
 (1,8,'2022-04-19', '10:00:00','22:00:00', 300, 5, 'preteAComposer'),
-(2,8,'2022-04-11', '10:00:00','22:00:00', 400, 5, 'enCompostion'),
+(2,8,'2022-04-11', '10:00:00','22:00:00', 400, 5, 'enComposition'),
 (3,8,'2022-04-12', '10:00:00','22:00:00', 600, 5, 'compositionValidee'), 
 (4,8,'2022-04-13', '10:00:00','22:00:00', 300, 10, 'enLivraison'), 
-(5,8,'2022-04-14', '10:00:00','22:00:00', 400, 4, 'enCompostion'), 
+(5,8,'2022-04-14', '10:00:00','22:00:00', 400, 4, 'enComposition'), 
 (1,8,'2022-04-15', '10:00:00','22:00:00', 600, 5, 'compositionValidee');
 
 

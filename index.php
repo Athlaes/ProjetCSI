@@ -7,7 +7,11 @@
     // $_SESSION["Panier"] = array($key=>$value);
     require 'Vue/vue_header.html';
     if (!isset($_GET['uc'])) {
-        $_GET['uc'] = "Acceuil";
+        if (APP_CONFIG == 'Client') {
+            $_GET['uc'] = "Acceuil";
+        } else {
+            $_GET['uc'] = "ConnexionEmploye";
+        }
     }
     $uc = $_GET['uc'];
     switch ($uc) {
@@ -28,6 +32,18 @@
             break;
         case 'Commandes':
             require 'Controleur/c_Commandes.php';
+            break;
+        case 'ConnexionEmploye':
+            require 'Controleur/c_ConnexionEmploye.php';
+            break;
+        case 'PlanningComposition':
+            require 'Controleur/c_PlanningComposition.php';
+            break;
+        case 'PlanningLivraison':
+            require 'Controleur/c_PlanningLivraison.php';
+            break;
+        case 'Clients':
+            require 'Controleur/c_Clients.php';
             break;
     }
     require_once 'Vue/vue_footer.html';
