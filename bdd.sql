@@ -218,6 +218,7 @@ begin
 			loop
 				update produit set qteactuelle = (select qteactuelle from produit where idproduit = i.idproduit and idcommande= r.idcommande)+i.qteproduit;
 				delete from contient where idproduit = i.idproduit and idcommande = r.idcommande;  
+                update client set client.nbcommandechouee = (select nbcommandechouee from client where idclient = r.idclient)+1 where idclient = r.idclient;
 			end loop;
 		end loop;
 end
@@ -233,37 +234,31 @@ end;
 
 $modif_heure$ language plpgsql;
 
-Create trigger modification_heure Before update on plannigLivraison
-	For each row execute procedure modif_heure();
+Create trigger modification_heure Before update on planniglivraison for each row 
+execute procedure modif_heure();
 
 ---------------------------------------------------------------------
 
 create or replace function bloquer_client() returns trigger as $$
-declare 
-num_personne int;
 begin
-if new.nbCommandeEchouee >= 3 then
-	statutCLient='Bloque';
+if client.nbcommandeechouee >= 3 then
+	update client set statutclient='bloque';
 End if;
 return new;
 end
 $$ language plpgsql;
-create trigger statut_ClientBloque before insert on commande for each row
+create trigger statut_ClientBloque before update on client for each statement
 execute procedure bloquer_client();
-
---------------------------------------------------------------
 
 create or replace function add_points() returns trigger as $$
 declare 
-nbpoint int;
-numcommande int;
 begin
-if (select StautCommande from commande where commande.idCommande=numcommande)='preteAComposer' then
-	new.nbPointFidelite=old.nbPointFidelite+nbpoint;
+-- if (select statutCommande from commande where commande.idCommande=old.idcommande)='preteAComposer' then
+if new.statutcommande = 'preteAComposer' then
+    update personne set nbpointfidelite=(select nbpointfidelite from personne where personne.idpersonne = old.idclient)+10;
 End if;
 return new;
 end
 $$ language plpgsql;
-
-create trigger nb_points_fidelite after update on commande for each row
+create trigger nb_points_fidelite after update on commande for each statement
 execute procedure add_points();
