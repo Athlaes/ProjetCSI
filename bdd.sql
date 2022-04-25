@@ -173,3 +173,98 @@ insert into contient (idProduit ,idCommande ,qteProduit) values
 -- Contraintes d'intégrité
 --
 
+--- procédure éxecuté périodiquement toutes les heures 
+-- vérification des paiements 12h après avoir passé la commande
+create function verifier_paiement() returns void as $$
+Declare 
+	r commande%rowtype;
+begin
+for r in 
+	SELECT * FROM commande 
+	where (current_date >= commande.datecommande and current_time >= commande.heuremaxpaiement) 
+		and (commande.statutcommande='passee')
+	loop
+		update commande set statutcommande= 'Echouee';
+	end loop;
+end
+$$ language plpgsql;
+
+-------------------------------------------------------------------
+-- procédure éxecuté tous les ans
+-- 
+
+create function remise_zero () returns void as $$
+begin
+update personne
+set nbPointFidelite = 0;
+end
+$$ language plpgsql;
+
+-------------------------------------------------------------------
+-- procédure éxecuté chaque fermeture de magasin
+--
+
+create function echec_commande() returns void as $$
+Declare 
+	r commande%rowtype;
+	i contient%rowtype;
+begin 
+	for r in
+		select * from commande where statutcommande = 'miseDeCote'
+		loop
+			update commande set statutcommande = 'Echouee';
+			for i in 
+				select * from contient where idcommande = r.idcommande			
+			loop
+				update produit set qteactuelle = (select qteactuelle from produit where idproduit = i.idproduit and idcommande= r.idcommande)+i.qteproduit;
+				delete from contient where idproduit = i.idproduit and idcommande = r.idcommande;  
+			end loop;
+		end loop;
+end
+$$ language plpgsql;
+
+--------------------------------------------------------------------
+create or replace function modif_heure() returns trigger as $$
+begin
+if new.heureLivraison - old.heureLivraison <= interval '30 minutes' Then 
+raise exception 'La nouvelle heure de Livraision doit être au moins 30 plus tard que celle initiale';
+End if
+end;
+
+$modif_heure$ language plpgsql;
+
+Create trigger modification_heure Before update on plannigLivraison
+	For each row execute procedure modif_heure();
+
+---------------------------------------------------------------------
+
+create or replace function bloquer_client() returns trigger as $$
+declare 
+num_personne int;
+begin
+if (select nbCommandeEchoue from client where client.idPersonne=num_personne) >= 3 then
+	new.statutCLient='Bloque';
+	else new.statutCLient='active';
+End if;
+return new;
+end
+$$ language plpgsql;
+create trigger statut_ClientBloque before insert on commande for each row
+execute procedure bloquer_client();
+
+--------------------------------------------------------------
+
+create or replace function add_points() returns trigger as $$
+declare 
+nbpoint int;
+numcommande int;
+begin
+if (select StautCommande from commande where commande.idCommande=numcommande)='preteAComposer' then
+	new.nbPointFidelite=old.nbPointFidelite+nbpoint;
+End if;
+return new;
+end
+$$ language plpgsql;
+
+create trigger nb_points_fidelite after update on commande for each row
+execute procedure add_points();
