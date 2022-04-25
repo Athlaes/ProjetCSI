@@ -242,9 +242,8 @@ create or replace function bloquer_client() returns trigger as $$
 declare 
 num_personne int;
 begin
-if (select nbCommandeEchoue from client where client.idPersonne=num_personne) >= 3 then
-	new.statutCLient='Bloque';
-	else new.statutCLient='active';
+if new.nbCommandeEchouee >= 3 then
+	statutCLient='Bloque';
 End if;
 return new;
 end
